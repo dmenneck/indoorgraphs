@@ -269,7 +269,7 @@ exports.IndoorGraphs = class IndoorGraphs {
       data = exportForProductionBuild(this.data);
     }
 
-    // the following steps always use the production build!!!!!
+    // the following steps always use the production build
 
     // save graph
     const [graph, excludedNodes, excludedPaths] = saveGraph(data, this.conditions);
@@ -279,12 +279,10 @@ exports.IndoorGraphs = class IndoorGraphs {
       return this.constructErrorMessage(`Node ${start} is not present in the graph.`)
     }
 
-
     // @ts-ignore
     if (!this.isNodeValid(graph, dest, "Dest")) {
       return this.constructErrorMessage(`Node ${dest} is not present in the graph.`)
     }
-
 
     // get valid start/dest node ids
     let startId = start;

@@ -25,7 +25,7 @@ const buildGraph = (nodes: any, conditions: any) => {
   // let filteredNodes = nodes;
 
   const [filteredNodes, excludedNodes, excludedPaths] = removeEdges(nodes, conditions)
-  
+
   // no nodes left after filter
   if (Object.entries(filteredNodes.nodes).length < 2) {
     return false
@@ -177,7 +177,13 @@ const removeEdges = (data: any ,conditions: any) => {
   const nodeAttributes = data.na;     
   const pathAttributes = copiedNodes.pa;
 
-  const { nodeRemovalConditions, edgeRemovalConditions } = conditions;
+  let nodeRemovalConditions: any = null;
+  let edgeRemovalConditions: any = null;
+
+  if (conditions) {
+    nodeRemovalConditions = conditions?.nodeRemovalConditions ? conditions.nodeRemovalConditions : null
+    edgeRemovalConditions = conditions?.edgeRemovalConditions ? conditions?.edgeRemovalConditions : null
+  }
 
   // run every node against every expression
   nodeRemovalConditions && nodeRemovalConditions.map((conditions: any) => {

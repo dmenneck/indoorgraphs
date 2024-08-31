@@ -6,6 +6,7 @@ const graphC = require("./graphs/routes.test/graph-c.json")
 const graphD = require("./graphs/routes.test/graph-d.json")
 const graphE = require("./graphs/routes.test/graph-e.json")
 const graphF = require("./graphs/routes.test/graph-f.json")
+const graphG = require("./graphs/routes.test/graph-g.json")
 
 describe('routes', () => {
     test("From a to b", () => {
@@ -238,6 +239,26 @@ describe('routes', () => {
 
             expect(steps[1].instruction).toBe("Leicht links abbiegen")
             expect(steps[1].category).toBe("slightlyLeft")
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
+    test("Path with street names", () => {
+        const streetNames = {
+            "1": "Gottesweg",
+            "2": "Luxemburgerstraße"
+        }
+
+        const graph = new IndoorGraphs(graphG, {pathNameIds: streetNames});
+
+
+        try {
+            const [coordinates, path, instructions, error] = graph.getRoute('EG_t1', 'EG_t6');
+
+            const steps = instructions.steps;
+
+            console.log(steps)
         } catch (error) {
             console.log(error)
         }

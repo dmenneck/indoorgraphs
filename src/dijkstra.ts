@@ -278,7 +278,7 @@ const getShortestPath = (data: any, dataWithAttributes: any, start: any, finish:
 
   const path = graph.Dijkstra(start, finish);
   const lineString: any = [];
-
+  
   const routingInstructions = calculateInstructions(path, data, includeIcons, pathNameIds, dataWithAttributes, start, finish, lang);
 
   // map over path to get semantics and stuff
