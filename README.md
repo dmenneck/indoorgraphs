@@ -1,9 +1,12 @@
+
 <p align="center">
 <img src="./src/images/graph.png" alt="Description" width="150" height="120">
 </p>
 
-<h2 align="center">Indoorgraphs</h2>
+<h2 align="center">indoorgraphs</h2>
 
+![NPM Version](https://img.shields.io/npm/v/indoorgraphs) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 
 indoorgraphs is a nodejs package that enables (client-side) routing in your mapping application.
 
