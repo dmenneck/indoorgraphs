@@ -20,4 +20,4 @@ For more detailed (and most likely helpful) documentation visit the Read the Doc
 # How to contribute
 I welcome all forms of contribution! If you have any questions, comments or suggestions, please open a [discussion](https://github.com/dmenneck/routing-package/discussions/new/choose) or [issue (feature request)](https://github.com/dmenneck/routing-package/issues/new/choose)!
 
-Also, please feel free to share how you're using Indoorgraphs, I'd love to know.
+Also, please feel free to share how you're using Indoorgraphs, I'd love to know. 
