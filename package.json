@@ -1,6 +1,6 @@
 {
   "name": "indoorgraphs",
-  "version": "0.0.107",
+  "version": "0.1.0",
   "description": "",
   "main": "./dist/index.js",
   "exports": {
