@@ -1,0 +1,37 @@
+{
+    "nodes": {
+        "EG_t1": {
+            "level": "EG",
+            "id": "EG_t1",
+            "attributes": {
+                "nodeType": "door"
+            },
+            "coordinates": [
+                6.9136063581758656,
+                50.94007324435498
+            ],
+            "adjacentNodes": [
+                "EG_t2"
+            ]
+        },
+        "EG_t2": {
+            "level": "EG",
+            "id": "EG_t2",
+            "attributes": {
+                "nodeType": "door"
+            },
+            "coordinates": [
+                6.917697122436982,
+                50.93984672162321
+            ],
+            "adjacentNodes": [
+                "EG_t1"
+            ]
+        }
+    },
+    "pathAttributes": {
+        "EG_t2-EG_t1": {
+            "pathType": "pathway"
+        }
+    }
+}

@@ -9,6 +9,7 @@ const graphF = require("./graphs/routes.test/graph-f.json")
 const graphG = require("./graphs/routes.test/graph-g.json")
 
 describe('routes', () => {
+
     test("From a to b", () => {
         const graph = new IndoorGraphs(graphA);
 
@@ -252,13 +253,12 @@ describe('routes', () => {
 
         const graph = new IndoorGraphs(graphG, {pathNameIds: streetNames});
 
-
         try {
             const [coordinates, path, instructions, error] = graph.getRoute('EG_t1', 'EG_t6');
 
             const steps = instructions.steps;
 
-            console.log(steps)
+            // TODO
         } catch (error) {
             console.log(error)
         }

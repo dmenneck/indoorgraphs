@@ -1,1 +1,75 @@
-{"nodes":{"EG_t1":{"level":"EG","id":"EG_t1","attributes":{},"coordinates":[6.915434564039493,50.93943749743923],"adjacentNodes":["EG_t2"]},"EG_t2":{"level":"EG","id":"EG_t2","attributes":{},"coordinates":[6.920667553827549,50.93958707734956],"adjacentNodes":["EG_t1","EG_t3"]},"EG_t3":{"level":"EG","id":"EG_t3","attributes":{},"coordinates":[6.92408589175212,50.93971491627869],"adjacentNodes":["EG_t2","EG_t4"]},"EG_t4":{"level":"EG","id":"EG_t4","attributes":{"entranceType":"room"},"coordinates":[6.924176293111001,50.93793033422719],"adjacentNodes":["EG_t3","EG_t5"]},"EG_t5":{"level":"EG","id":"EG_t5","attributes":{},"coordinates":[6.924219998606084,50.93617971953884],"adjacentNodes":["EG_t4"]}},"pathAttributes":{"EG_t2-EG_t1":{},"EG_t3-EG_t2":{},"EG_t4-EG_t3":{},"EG_t5-EG_t4":{}}}
+{
+    "nodes": {
+        "EG_t1": {
+            "level": "EG",
+            "id": "EG_t1",
+            "attributes": {},
+            "coordinates": [
+                6.915434564039493,
+                50.93943749743923
+            ],
+            "adjacentNodes": [
+                "EG_t2"
+            ]
+        },
+        "EG_t2": {
+            "level": "EG",
+            "id": "EG_t2",
+            "attributes": {},
+            "coordinates": [
+                6.920667553827549,
+                50.93958707734956
+            ],
+            "adjacentNodes": [
+                "EG_t1",
+                "EG_t3"
+            ]
+        },
+        "EG_t3": {
+            "level": "EG",
+            "id": "EG_t3",
+            "attributes": {},
+            "coordinates": [
+                6.92408589175212,
+                50.93971491627869
+            ],
+            "adjacentNodes": [
+                "EG_t2",
+                "EG_t4"
+            ]
+        },
+        "EG_t4": {
+            "level": "EG",
+            "id": "EG_t4",
+            "attributes": {
+                "entranceType": "room"
+            },
+            "coordinates": [
+                6.924176293111001,
+                50.93793033422719
+            ],
+            "adjacentNodes": [
+                "EG_t3",
+                "EG_t5"
+            ]
+        },
+        "EG_t5": {
+            "level": "EG",
+            "id": "EG_t5",
+            "attributes": {},
+            "coordinates": [
+                6.924219998606084,
+                50.93617971953884
+            ],
+            "adjacentNodes": [
+                "EG_t4"
+            ]
+        }
+    },
+    "pathAttributes": {
+        "EG_t2-EG_t1": {},
+        "EG_t3-EG_t2": {},
+        "EG_t4-EG_t3": {},
+        "EG_t5-EG_t4": {}
+    }
+}
