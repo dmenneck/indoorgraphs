@@ -2,6 +2,7 @@ export {}
 const {IndoorGraphs} = require('../dist/index');
 
 describe('Verify graph structure', () => {
+
     test("Valid graph structure", () => {
         const data = {
             "nodes": {},

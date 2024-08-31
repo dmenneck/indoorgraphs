@@ -4,8 +4,6 @@ const { IndoorGraphs } = require('../dist/index');
 
 describe('Conditions', () => {
 
-    test("", () => {})
-
     test("remove node", () => {
         const data = {
             "nodes": {

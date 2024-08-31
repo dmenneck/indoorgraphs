@@ -25,9 +25,6 @@ describe('addGraph()', () => {
         "nan":["nodeType","doorWidth","isDoor","doorHeight"]
     }
 
-    test("", () => {})
-
-    /*
     test("Should fail because no graph provided", () => {
         const graph = new IndoorGraphs(data1);
 
@@ -83,5 +80,4 @@ describe('addGraph()', () => {
             })
         })      
     })
-        */
 })
