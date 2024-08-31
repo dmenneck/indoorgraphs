@@ -1,0 +1,112 @@
+{
+    "nodes": {
+        "UG_t1": {
+            "coordinates": [
+                6.967842553558049,
+                50.946860664839846
+            ],
+            "attributes": "a9e9",
+            "id": "UG_t1",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t2:7715"
+            ]
+        },
+        "UG_t2": {
+            "coordinates": [
+                6.968503094697883,
+                50.94665193377298
+            ],
+            "attributes": "a9e9",
+            "id": "UG_t2",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t1:7715",
+                "UG_t3:7715",
+                "UG_t4:22fe"
+            ]
+        },
+        "UG_t3": {
+            "coordinates": [
+                6.968773492332983,
+                50.946443547248236
+            ],
+            "attributes": "0752",
+            "id": "UG_t3",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t2:7715"
+            ]
+        },
+        "UG_t4": {
+            "coordinates": [
+                6.968361048109886,
+                50.94645068963047
+            ],
+            "attributes": "c6b4",
+            "id": "UG_t4",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t2:22fe",
+                "UG_t5:22fe"
+            ]
+        },
+        "UG_t5": {
+            "coordinates": [
+                6.968284158374042,
+                50.94621802073712
+            ],
+            "attributes": "a9e9",
+            "id": "UG_t5",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t6:7715",
+                "UG_t4:22fe"
+            ]
+        },
+        "UG_t6": {
+            "coordinates": [
+                6.968265307378921,
+                50.946034623371844
+            ],
+            "attributes": "8cf5",
+            "id": "UG_t6",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t5:7715"
+            ]
+        }
+    },
+    "pathAttributes": {
+        "7715": {
+            "pathWidth": "20"
+        },
+        "22fe": {
+            "pathWidth": "40"
+        }
+    },
+    "nodeAttributes": {
+        "a9e9": {
+            "wellLit": true,
+            "doorWidth": "200"
+        },
+        "0752": {
+            "wellLit": "undefined",
+            "doorWidth": "200"
+        },
+        "c6b4": {
+            "wellLit": false,
+            "doorWidth": "250"
+        },
+        "8cf5": {
+            "wellLit": false,
+            "doorWidth": "100"
+        }
+    }
+}

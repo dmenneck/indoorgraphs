@@ -1,0 +1,121 @@
+{
+    "nodes": {
+        "UG_t1": {
+            "coordinates": [
+                6.967842553558049,
+                50.946860664839846
+            ],
+            "attributes": {
+                "wellLit": true,
+                "doorWidth": "200"
+            },
+            "id": "UG_t1",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t2"
+            ]
+        },
+        "UG_t2": {
+            "coordinates": [
+                6.968503094697883,
+                50.94665193377298
+            ],
+            "attributes": {
+                "wellLit": true,
+                "doorWidth": "200"
+            },
+            "id": "UG_t2",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t1",
+                "UG_t3",
+                "UG_t4"
+            ]
+        },
+        "UG_t3": {
+            "coordinates": [
+                6.968773492332983,
+                50.946443547248236
+            ],
+            "attributes": {
+                "wellLit": "undefined",
+                "doorWidth": "200"
+            },
+            "id": "UG_t3",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t2"
+            ]
+        },
+        "UG_t4": {
+            "coordinates": [
+                6.968361048109886,
+                50.94645068963047
+            ],
+            "attributes": {
+                "wellLit": false,
+                "doorWidth": "250"
+            },
+            "id": "UG_t4",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t2",
+                "UG_t5"
+            ]
+        },
+        "UG_t5": {
+            "coordinates": [
+                6.968284158374042,
+                50.94621802073712
+            ],
+            "attributes": {
+                "wellLit": true,
+                "doorWidth": "200"
+            },
+            "id": "UG_t5",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t4",
+                "UG_t6"
+            ]
+        },
+        "UG_t6": {
+            "coordinates": [
+                6.968265307378921,
+                50.946034623371844
+            ],
+            "attributes": {
+                "wellLit": false,
+                "doorWidth": "100"
+            },
+            "id": "UG_t6",
+            "type": "Node",
+            "level": "UG",
+            "adjacentNodes": [
+                "UG_t5"
+            ]
+        }
+    },
+    "pathAttributes": {
+        "UG_t2-UG_t1": {
+            "pathWidth": "20"
+        },
+        "UG_t3-UG_t2": {
+            "pathWidth": "20"
+        },
+        "UG_t4-UG_t2": {
+            "pathWidth": "40"
+        },
+        "UG_t5-UG_t4": {
+            "pathWidth": "40"
+        },
+        "UG_t6-UG_t5": {
+            "pathWidth": "20"
+        }
+    }
+}

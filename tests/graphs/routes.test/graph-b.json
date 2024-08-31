@@ -1,0 +1,61 @@
+{
+    "nodes": {
+        "EG_t1": {
+            "level": "EG",
+            "id": "EG_t1",
+            "attributes": {},
+            "coordinates": [
+                6.94156229732969,
+                50.94820126542473
+            ],
+            "adjacentNodes": [
+                "EG_t2",
+                "EG_t4"
+            ]
+        },
+        "EG_t2": {
+            "level": "EG",
+            "id": "EG_t2",
+            "attributes": {
+                "entranceType": "building"
+            },
+            "coordinates": [
+                6.945394838735844,
+                50.94854599408032
+            ],
+            "adjacentNodes": [
+                "EG_t1",
+                "EG_t3"
+            ]
+        },
+        "EG_t3": {
+            "level": "EG",
+            "id": "EG_t3",
+            "attributes": {},
+            "coordinates": [
+                6.948168295030743,
+                50.94880544037471
+            ],
+            "adjacentNodes": [
+                "EG_t2"
+            ]
+        },
+        "EG_t4": {
+            "level": "EG",
+            "id": "EG_t4",
+            "attributes": {},
+            "coordinates": [
+                6.93935744361711,
+                50.94801618786431
+            ],
+            "adjacentNodes": [
+                "EG_t1"
+            ]
+        }
+    },
+    "pathAttributes": {
+        "EG_t2-EG_t1": {},
+        "EG_t3-EG_t2": {},
+        "EG_t4-EG_t1": {}
+    }
+}
