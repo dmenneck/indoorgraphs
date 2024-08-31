@@ -576,7 +576,10 @@ const entrance = (lang: string, entranceType: string) => {
 
 const getEntranceType = (node: string, nodeAttributesNames: any, na: any) => {
   const indexEntranceType = nodeAttributesNames.indexOf("entranceType");
-  const nodeAttributesID = node[4]
+
+  if (indexEntranceType === -1) return undefined
+
+  const nodeAttributesID = node[3]
   const nodeAttributes = na[nodeAttributesID];
 
   const entranceType = nodeAttributes[indexEntranceType]
@@ -743,15 +746,15 @@ const getPathType = (nodeId: string, adjacentNodeId: string, pathAttributes: any
   const nodeTypeIndex = nodeAttributesNames.indexOf("type");
   const nodeEntranceTypeIndex = nodeAttributesNames.indexOf("entranceType");
 
-  const nodeType = nodeAttributes[node[4]] && nodeAttributes[node[4]][nodeTypeIndex]
-  const nextNodeType = nodeAttributes[adjacentNode[4]] && nodeAttributes[adjacentNode[4]][nodeTypeIndex]
+  const nodeType = nodeAttributes[node[3]] && nodeAttributes[node[3]][nodeTypeIndex]
+  const nextNodeType = nodeAttributes[adjacentNode[3]] && nodeAttributes[adjacentNode[3]][nodeTypeIndex]
 
-  const entranceNodeType = nodeAttributes[node[4]] && nodeAttributes[node[4]][nodeEntranceTypeIndex]
-  const entranceNextNodeType = nodeAttributes[adjacentNode[4]] && nodeAttributes[adjacentNode[4]][nodeEntranceTypeIndex]
+  const entranceNodeType = nodeAttributes[node[3]] && nodeAttributes[node[3]][nodeEntranceTypeIndex]
+  const entranceNextNodeType = nodeAttributes[adjacentNode[3]] && nodeAttributes[adjacentNode[3]][nodeEntranceTypeIndex]
 
   if (entranceNodeType === "elevator" && entranceNodeType === entranceNextNodeType) return "elevator"
 
-  const adjacentNodes = node[5];
+  const adjacentNodes = node[4];
   const adjacentNodeWithPathAttributesId = adjacentNodes.filter((id: string) => id.includes(adjacentNodeId))
 
   if (!adjacentNodeWithPathAttributesId[0]) return undefined;
@@ -819,9 +822,9 @@ const getNodeTypes = (path: string[], nextPath: string[] ,data: any) => {
   path.map((currentNode, index) => {
 
     // last node and first node of next path 
-    if (nextPath && nextPath.at(0) === currentNode && path.at(-1) === currentNode && nodes[currentNode][4]) nodeTypes.push(undefined)
+    if (nextPath && nextPath.at(0) === currentNode && path.at(-1) === currentNode && nodes[currentNode][3]) nodeTypes.push(undefined)
     else {
-      const nodeAttributeID = nodes[currentNode][4]
+      const nodeAttributeID = nodes[currentNode][3]
       const nodeTypeIndex = nodeAttributesName.indexOf("type")
 
       if (typeof nodeAttributes[nodeAttributeID] === "undefined") nodeTypes.push(undefined)
@@ -938,12 +941,12 @@ const getAdjacentPaths = (path: string[], nodes: any, pathAttributes: any, pathA
     const nodeIdSplit = nodeId.split("_")[1] ? nodeId.split("_")[1] : nodeId;
     const nextNodeIdSplit = nextNodeId.split("_")[1] ? nextNodeId.split("_")[1] : nextNodeId;
 
-    let pathAttributesId = nodes[nodeId][5].filter((adjNode: string) => adjNode.includes(nextNodeIdSplit))
+    let pathAttributesId = nodes[nodeId][4].filter((adjNode: string) => adjNode.includes(nextNodeIdSplit))
     if (pathAttributesId.length > 0 && pathAttributesId[0].includes(":")) pathAttributesId = pathAttributesId[0].split(":")[1]
 
     // extract path id/name 
     // 'OG1_t01:f477' => 'f477'
-    let pathName = nodes[nodeId][5].filter((adjNode: string) => adjNode.includes(nextNodeIdSplit))
+    let pathName = nodes[nodeId][4].filter((adjNode: string) => adjNode.includes(nextNodeIdSplit))
     if (pathName && pathName[0] && pathName[0].includes(":")) {
       pathName = pathName[0].split(":")[1]
     } else {

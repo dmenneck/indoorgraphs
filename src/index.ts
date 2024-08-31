@@ -79,7 +79,7 @@ const getRoomEntranceNodes = (graph: any, roomNumber: string) => {
 
   Object.values(graph.nodes).map((node: any) => {
     const nodeID = node[1];
-    const attributesID = node[4];
+    const attributesID = node[3];
     const attributes = graph.na[attributesID];
 
     if (attributesID) {
@@ -303,8 +303,9 @@ exports.IndoorGraphs = class IndoorGraphs {
       if (shortestPath[2] && shortestPath[2]?.floors?.length === 1) delete shortestPath[2].floorChangeWithStairsOrElevator
     }
 
+
     // check if path has more than one node
-    if (shortestPath[1].length === 1) {
+    if (shortestPath[1] && shortestPath[1]?.length === 1) {
       return this.constructErrorMessage(`No path found.`)
     }
 

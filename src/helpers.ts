@@ -5,7 +5,6 @@ const turf = require('@turf/turf');
 const {getPathName} = require("./dijkstra")
 
 const saveGraph = (nodes: any, conditions: any) => {
-
   const [graph, excludedNodes, excludedPaths]: any = buildGraph(nodes, conditions);
 
   const finishedGraph: any = {}
@@ -23,9 +22,7 @@ const saveGraph = (nodes: any, conditions: any) => {
 const buildGraph = (nodes: any, conditions: any) => {
   const nodesArray: any = []
   // let filteredNodes = nodes;
-
   const [filteredNodes, excludedNodes, excludedPaths] = removeEdges(nodes, conditions)
-
   // no nodes left after filter
   if (Object.entries(filteredNodes.nodes).length < 2) {
     return false
@@ -36,8 +33,8 @@ const buildGraph = (nodes: any, conditions: any) => {
 
     const node = nodeID?.includes(":") ? filteredNodes.nodes[nodeID.split(":")[0]] : filteredNodes.nodes[nodeID];
 
-    if (node[5]) {
-      node[5].map((adjacentNode: any) => {
+    if (node[4]) {
+      node[4].map((adjacentNode: any) => {
 
         const dest = adjacentNode?.includes(":") ? filteredNodes.nodes[adjacentNode.split(":")[0]] : filteredNodes.nodes[adjacentNode]
         if (!dest) return false
@@ -81,7 +78,7 @@ const deletePathAttributesWhereId = (id: string, copiedNodes: any) => {
 }
 
 const getNodeKeyValuePairs = (node: any, na: any, nan: any) => {
-  const attributes = na[node[4]];
+  const attributes = na[node[3]];
   const transformedAttributes: any = {}
 
   if (!attributes) return undefined
@@ -189,7 +186,7 @@ const removeEdges = (data: any ,conditions: any) => {
   nodeRemovalConditions && nodeRemovalConditions.map((conditions: any) => {
 
     Object.entries(copiedNodes.nodes).map(([id, node]: any) => {
-      if (! nodeAttributes[node[4]] || Object.keys( nodeAttributes[node[4]]).length === 0) return;
+      if (! nodeAttributes[node[3]] || Object.keys(nodeAttributes[node[3]]).length === 0) return;
 
       const attributes = getNodeKeyValuePairs(node, copiedNodes.na, copiedNodes.nan);
 
@@ -205,7 +202,7 @@ const removeEdges = (data: any ,conditions: any) => {
   })
 
   Object.entries(copiedNodes.nodes).map(([id, node]: any) => {
-    const adjacentNodes = node[5]
+    const adjacentNodes = node[4]
 
     adjacentNodes.map((adjacentNode: string) => {
       if (!adjacentNode.includes(":")) return;
@@ -224,8 +221,8 @@ const removeEdges = (data: any ,conditions: any) => {
 
           if (shouldDelete) {
               // remove node from adjacentNodes
-              const filteredAdjacentNodes = copiedNodes.nodes[id][5].filter((nodeId: string) => nodeId !== adjacentNode);
-              copiedNodes.nodes[id][5] = filteredAdjacentNodes;
+              const filteredAdjacentNodes = copiedNodes.nodes[id][4].filter((nodeId: string) => nodeId !== adjacentNode);
+              copiedNodes.nodes[id][4] = filteredAdjacentNodes;
               excludedPaths.push(pathAttributesId)
           }
         }  
@@ -233,65 +230,8 @@ const removeEdges = (data: any ,conditions: any) => {
     })
   })
 
-  // O(n) -> n = amount of nodes
-  // loop over every node
-  /*
-  Object.entries(copiedNodes.nodes).map(([id, node]: any) => {
-    const attributes = nodeAttributes[node[4]];
-
-    if (!attributes || Object.keys(attributes).length === 0) return;
-
-    // run every node against every expression
-    nodeRemovalExpression.map((expressions: any) => {
-
-        Object.entries(copiedNodes.nodes).map(([id, node]: any) => {
-
-          const attributes = getNodeKeyValuePairs(node, copiedNodes.na, copiedNodes.nan);
-
-          // console.log(attributes)
-
-          if (attributes) {
-            const shouldDelete = applyExpression(attributes, expressions)
-            if (shouldDelete) delete copiedNodes.nodes[id]
-          }                      
-        })
-      })
-  })
-      */
-
-  /*
-  Object.entries(copiedNodes.nodes).map(([id, node]: any) => {
-    const adjacentNodes = node[5]
-
-    adjacentNodes.map((adjacentNode: string) => {
-      if (!adjacentNode.includes(":")) return;
-
-      const pathAttributesId = adjacentNode.split(":")[1];
-      const attributes = pathAttributes[pathAttributesId]
-
-      if (!attributes || Object.keys(attributes).length === 0) return;
-
-       // run every path against every expression
-      pathRemovalExpression.map((expressions: any) => {
-        const transformedPathAttributes = getPathAttributesKeyValuePairs(attributes, copiedNodes.pan);
-
-        if (attributes) {
-          const shouldDelete = applyExpression(transformedPathAttributes, expressions);
-
-          if (shouldDelete) {
-              // remove node from adjacentNodes
-              const filteredAdjacentNodes = copiedNodes.nodes[id][5].filter((nodeId: string) => nodeId !== adjacentNode);
-              copiedNodes.nodes[id][5] = filteredAdjacentNodes;
-          }
-        }  
-      })
-    })
-  })
-    */
-
-
-    return [copiedNodes, excludedNodes, excludedPaths]
-  }
+  return [copiedNodes, excludedNodes, excludedPaths]
+}
 
 const getNodesPathAttribute = (pathAttributesId: string, copiedNodes: any) => {
   // pa = pathAttributes
@@ -382,7 +322,7 @@ const reduceNodeInformations = (nodes: any) => {
   const reducedNodes: any = {};
   
   Object.entries(nodes).map(([nodeId, attributes]: any) => {
-    reducedNodes[nodeId] = [attributes.coordinates, attributes.id, attributes.type, attributes.level, attributes.attributes, attributes.adjacentNodes]
+    reducedNodes[nodeId] = [attributes.coordinates, attributes.id, attributes.level, attributes.attributes, attributes.adjacentNodes]
   })
   
   return reducedNodes;
@@ -633,7 +573,7 @@ const matchToNearestPath = (graph: any, coords: number[], type: string, match: a
   
     const nextPoints: any = []
     // get adjacent nodes
-    const adjacentNodes = graph.nodes[nearestNodeId][5];
+    const adjacentNodes = graph.nodes[nearestNodeId][4];
 
     adjacentNodes.map((n: string) => {
       if (!n.includes(",")) {
@@ -663,8 +603,8 @@ const matchToNearestPath = (graph: any, coords: number[], type: string, match: a
     const snapped = turf.nearestPointOnLine(line, targetPoint, {units: 'kilometers'});
 
     // add adjacency
-    graph.nodes[nearestNodeId][5].push(`matchedTemp${type}`)
-    graph.nodes[nextNearestNodeId][5].push(`matchedTemp${type}`)
+    graph.nodes[nearestNodeId][4].push(`matchedTemp${type}`)
+    graph.nodes[nextNearestNodeId][4].push(`matchedTemp${type}`)
 
     // create new temp node
     graph.nodes[`matchedTemp${type}`] = [
@@ -825,7 +765,7 @@ const matchToNearestPath = (graph: any, coords: number[], type: string, match: a
     const node = nodes[nodeID.includes(":") ? nodeID.split(":")[0] : nodeID];
 
     const nodeCoordinates = node[0]
-    const adjacentNodes = node[5];
+    const adjacentNodes = node[4];
 
     // loop over every adjacent node, span a linestring and calculate distance
     adjacentNodes.map((id: string) => {
@@ -864,7 +804,7 @@ const matchToNearestPath = (graph: any, coords: number[], type: string, match: a
   
   const pathName = getPathName(nodeA.split("_")[1], nodeB.split("_")[1], graph.streetIds);
 
-  let pathId = graph.nodes[nodeA][5].filter((id: string) => id.includes(nodeB));
+  let pathId = graph.nodes[nodeA][4].filter((id: string) => id.includes(nodeB));
   if (pathId[0] && pathId[0].includes(":")) pathId = pathId[0].split(":")[1]
   else pathId = ""
 
@@ -872,8 +812,8 @@ const matchToNearestPath = (graph: any, coords: number[], type: string, match: a
   if (pathId) matchedTempNodeId= matchedTempNodeId + ":" + pathId
 
   // add adjacency
-  graph.nodes[nodeA][5].push(matchedTempNodeId)
-  graph.nodes[nodeB][5].push(matchedTempNodeId)
+  graph.nodes[nodeA][4].push(matchedTempNodeId)
+  graph.nodes[nodeB][4].push(matchedTempNodeId)
 
   // create new temp node
   const tmpNode = [
