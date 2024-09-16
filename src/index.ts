@@ -1,19 +1,8 @@
 const { saveGraph, exportForProductionBuild, getRoutableOptions, matchToNearestPath } = require('./helpers')
 const { getShortestPath } = require('./dijkstra');
 
-interface DefaultRoutingOptions {
-  nodeOptions: object;
-  pathOptions: object;
-  [key: string]: any
-}
-
 interface Data {
   [key: string]: any
-}
-
-const defaultRoutingOptions: DefaultRoutingOptions = {
-  nodeOptions: {},
-  pathOptions: {},
 }
 
 const validateData = (graph: any) => {
@@ -66,8 +55,6 @@ interface SecondArgument {
 
 const getProductionBuild = (data: any, streetIds: any) => {
   const exportGraph = exportForProductionBuild(data, streetIds);
-
- // console.log(exportGraph)
 
   return exportGraph;
 }
@@ -201,7 +188,6 @@ exports.IndoorGraphs = class IndoorGraphs {
     else return true;
   }
 
-
   isNodeValid(data: Data, node: string, type: string) {
     let id = node;
 
@@ -302,7 +288,6 @@ exports.IndoorGraphs = class IndoorGraphs {
       // @ts-ignore
       if (shortestPath[2] && shortestPath[2]?.floors?.length === 1) delete shortestPath[2].floorChangeWithStairsOrElevator
     }
-
 
     // check if path has more than one node
     if (shortestPath[1] && shortestPath[1]?.length === 1) {
