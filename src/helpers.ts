@@ -15,7 +15,6 @@ const saveGraph = (nodes: any, conditions: any) => {
     finishedGraph[node.id] = node
   })
 
-
   return [finishedGraph, excludedNodes, excludedPaths]
 }
 
@@ -65,16 +64,6 @@ const buildGraph = (nodes: any, conditions: any) => {
   }
 
   return [nodesArray, excludedNodes, excludedPaths]
-}
-
-const deletePathAttributesWhereId = (id: string, copiedNodes: any) => {
-
-  // delete all the pathAttributes that are associated with Elevator nodes
-  Object.keys(copiedNodes.pa).map((key) => {
-    if (key.includes(id)) delete copiedNodes.pa[key]
-  })
-
-  return copiedNodes
 }
 
 const getNodeKeyValuePairs = (node: any, na: any, nan: any) => {
