@@ -436,7 +436,6 @@ const getRoutableOptions = (prod: any, exclude: [string]) => {
   return { nodeAttributesOptions, pathAttributesOptions }
 }
 
-
 const matchToNearestPath = (graph: any, coords: number[], type: string, match: any, pathNameIds: any) => {
   const matchLayer = match?.matchLayer;
   const matchOnGraphNodes = match?.matchOnGraphNodes;

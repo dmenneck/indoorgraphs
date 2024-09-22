@@ -250,7 +250,6 @@ exports.IndoorGraphs = class IndoorGraphs {
 
     // check if nodes are prod nodes or dev
     if (!this.data.na || !this.data.nan) {
-      // "TEST SCHREIBEN!!!"
       console.log("The graph you've provided is not production ready. To calculate a graph more quickly create a production build using getProductionBuild() and pass the data to a new IndoorGraphs.")
       data = exportForProductionBuild(this.data);
     }
