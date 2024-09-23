@@ -248,13 +248,13 @@ exports.IndoorGraphs = class IndoorGraphs {
       else return this.constructErrorMessage(updatedGraph.message);
     }
 
-    // check if nodes are prod nodes or dev
+    // check if nodes are prod nodes or dev nodes
     if (!this.data.na || !this.data.nan) {
       console.log("The graph you've provided is not production ready. To calculate a graph more quickly create a production build using getProductionBuild() and pass the data to a new IndoorGraphs.")
       data = exportForProductionBuild(this.data);
     }
 
-    // the following steps always use the production build
+    // important: the following steps always use the production build
 
     // save graph
     const [graph, excludedNodes, excludedPaths] = saveGraph(data, this.conditions);
