@@ -50,7 +50,6 @@ export interface StreetMap {
 interface SecondArgument {
   includeIcons: boolean,
   pathNameIds: StreetMap;
-  conditions: any
 }
 
 const getProductionBuild = (data: any, streetIds: any) => {
@@ -87,13 +86,9 @@ exports.IndoorGraphs = class IndoorGraphs {
   includeIcons: boolean;
   pathNameIds: StreetMap;
   lang: string;
-  conditions: any
+  conditions: any;
 
   constructor(data: Data, options: SecondArgument = {
-    conditions: {
-      nodeRemovalConditions: [],
-      edgeRemovalConditions: []
-    },
     includeIcons: false,
     pathNameIds: null
   }) {
@@ -103,14 +98,15 @@ exports.IndoorGraphs = class IndoorGraphs {
       throw new TypeError(message);
     }
 
-    const { includeIcons, pathNameIds, conditions }: SecondArgument = options;
+    const { includeIcons, pathNameIds }: SecondArgument = options;
 
-    // für include icons und pathNameIds noch tests schreiben!!!
     this.includeIcons = includeIcons;
     this.pathNameIds = pathNameIds;
-
+    this.conditions = {
+      nodeRemovalConditions: [],
+      edgeRemovalConditions: []
+    } 
     this.data = data;
-    this.conditions = conditions;
   }
 
   getNodeRemovalConditions() {
@@ -240,7 +236,6 @@ exports.IndoorGraphs = class IndoorGraphs {
     // test!!!
     // @ts-ignore
     if (typeof dest === "object" || dest.length === 2) {
-      // console.log(data)
 
       // @ts-ignore
       const updatedGraph = this.matchToNearestPath(dest, data, "Dest", match);
