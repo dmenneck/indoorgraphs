@@ -367,7 +367,6 @@ const icons = {
   follow: straightIcon
 };
 
-
 const getRoutingInstructions = (steps: any, pathNameIds: any, path: any, data: any) => {
   const routingInstructions: any = [];
   const updatedNodeIdsPerInstruction: any = {};
@@ -442,7 +441,7 @@ const getRoutingInstructions = (steps: any, pathNameIds: any, path: any, data: a
         let turnInstruction = step.turnType[0];
 
         if (streetNameNext) turnInstruction = turn(turnInstruction, streetNameNext, "de")
-        // routingInstructions.push([turnInstruction, turnType[1], pathType, null, floors]);
+        // routingInstructions.push([turnInstruction, turnType[1], pathType,  floors]);
 
         // turns are just points and hence dont include a pathtype or streetname
         routingInstructions.push({
