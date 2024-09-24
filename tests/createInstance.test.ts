@@ -22,7 +22,8 @@ describe('Create Instance of IndoorGraphs', () => {
     expect(graph.pathNameIds).toBe(undefined)
     expect(graph.data).not.toBe(undefined)
     expect(graph).not.toBe(undefined)
-    expect(graph.conditions).toBe(undefined)
+    expect(graph.conditions.edgeRemovalConditions.length).toBe(0)
+    expect(graph.conditions.nodeRemovalConditions.length).toBe(0)
   })
    
   test('No data provided', () => {

@@ -486,10 +486,8 @@ describe('Class methods', () => {
     })
 
     test("getNodeRemovalConditions()", () => {
-        const conditions = {
-            nodeRemovalConditions: [["isWellLit === true"]],
-        }
-        const graph = new IndoorGraphs(dataFive, { conditions });
+        const graph = new IndoorGraphs(dataFive);
+        graph.removeNodes([["isWellLit === true"]])
         const getConditions = graph.getNodeRemovalConditions();
 
         expect(getConditions.length).toBe(1)
@@ -497,10 +495,8 @@ describe('Class methods', () => {
     })
 
     test("getEdgeRemovalConditions()", () => {
-        const conditions = {
-            edgeRemovalConditions: [["isWellLit === true"]],
-        }
-        const graph = new IndoorGraphs(dataFive, { conditions });
+        const graph = new IndoorGraphs(dataFive);
+        graph.removeEdges([["isWellLit === true"]])
         const getConditions = graph.getEdgeRemovalConditions();
 
         expect(getConditions.length).toBe(1)
@@ -512,8 +508,6 @@ describe('Class methods', () => {
 
         try {
             const [coordinates, path, instructions, error] = graph.getRoute('UG_t1', 'UG_t2');
-
-            console.log(path)
         } catch (error) {
             console.log(error)
         }

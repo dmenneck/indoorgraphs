@@ -270,8 +270,6 @@ describe('routes', () => {
         const graph = new IndoorGraphs(graphH, {pathNameIds: streetsH});
         try {
             const [coordinates, path, instructions, error] = graph.getRoute([6.92317, 50.92991], [6.93699, 50.92639]);
-            console.log(instructions.steps)
-
         } catch (error) {
             console.log(error)
         }
