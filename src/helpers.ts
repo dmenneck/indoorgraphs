@@ -22,6 +22,7 @@ const buildGraph = (nodes: any, conditions: any) => {
   const nodesArray: any = []
   // let filteredNodes = nodes;
   const [filteredNodes, excludedNodes, excludedPaths] = removeEdges(nodes, conditions)
+
   // no nodes left after filter
   if (Object.entries(filteredNodes.nodes).length < 2) {
     return false
@@ -57,7 +58,6 @@ const buildGraph = (nodes: any, conditions: any) => {
 
     nodesArray.push({
       id: node[1],
-      type: node[2],
       coords: node[0],
       adjacentLinks
     })
@@ -193,7 +193,7 @@ const removeEdges = (data: any ,conditions: any) => {
   Object.entries(copiedNodes.nodes).map(([id, node]: any) => {
     const adjacentNodes = node[4]
 
-    adjacentNodes.map((adjacentNode: string) => {
+    adjacentNodes?.map((adjacentNode: string) => {
       if (!adjacentNode.includes(":")) return;
 
       const pathAttributesId = adjacentNode.split(":")[1];
@@ -484,7 +484,6 @@ const matchToNearestPath = (graph: any, coords: number[], type: string, match: a
   const targetPoint = turf.point(coords);
   const points: any = [];
   const coordinatesOnlyPoints: number[][] = [];
-  let roomEntrancePresent = false;
 
   // check if coords are in a room; if so -> match to room entrance
   if (matchLayer) {
@@ -499,9 +498,6 @@ const matchToNearestPath = (graph: any, coords: number[], type: string, match: a
       const poly = turf.polygon(coordinates[0]);
 
       if (turf.booleanPointInPolygon(converted, poly)) {
-        // check if room has a valid room entrance
-        roomEntrancePresent = true;
-
         Object.values(graph.nodes).map((attributes: any) => {
           if (!attributes[matchOnGraphNodes]) {
             invalidMatchOn = matchOnGraphNodes;
@@ -518,7 +514,6 @@ const matchToNearestPath = (graph: any, coords: number[], type: string, match: a
               coordinates: coords,
               attributes: {},
               id: `matchedTemp${type}`,
-              type: "Node",
               adjacentNodes: [attributes.id]
             }
             // add adjacency
@@ -530,9 +525,7 @@ const matchToNearestPath = (graph: any, coords: number[], type: string, match: a
 
     if (typeof invalidMatchOn === "string" && !skipMissing) {
       return { error: true, message: "Found features that do not contain the provided 'matchOnGraphNodes' attribute." }
-    } else {
-      roomEntrancePresent = false
-    }
+    } 
   }
 
   Object.entries(graph.nodes).map(([id, attributes]: any) => {
@@ -634,7 +627,6 @@ const matchToNearestPath = (graph: any, coords: number[], type: string, match: a
   const tmpNode = [
     snapped.geometry.coordinates,
     `matchedTemp${type}`,
-    null,
     'OD',
     null,
     [`${nodeA}:${pathId}`, `${nodeB}:${pathId}`],
