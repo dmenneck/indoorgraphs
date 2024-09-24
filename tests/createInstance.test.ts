@@ -73,9 +73,9 @@ describe('Create Instance of IndoorGraphs', () => {
  
   test('Invalid graph, no object - 3', () => {
     try {
-        new IndoorGraphs(null, {})
+        new IndoorGraphs({})
       } catch (error) {
-        expect(error.message).toBe("Please provide a valid indoor graph.");
+        expect(error.message).toBe("Graph is not of type {nodes: {}, pathAttributes: {}}. Please provide a valid indoor graph.");
       }
   })
 

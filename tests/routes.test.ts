@@ -7,6 +7,8 @@ const graphD = require("./graphs/routes.test/graph-d.json")
 const graphE = require("./graphs/routes.test/graph-e.json")
 const graphF = require("./graphs/routes.test/graph-f.json")
 const graphG = require("./graphs/routes.test/graph-g.json")
+const graphH = require("./graphs/routes.test/graph-h.json")
+const streetsH = require("./streetNames/streetNames-h.json")
 
 describe('routes', () => {
 
@@ -259,6 +261,17 @@ describe('routes', () => {
             const steps = instructions.steps;
 
             // TODO
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
+    test("Path with street names: combine paths with same streetname", () => {
+        const graph = new IndoorGraphs(graphH, {pathNameIds: streetsH});
+        try {
+            const [coordinates, path, instructions, error] = graph.getRoute([6.92317, 50.92991], [6.93699, 50.92639]);
+            console.log(instructions.steps)
+
         } catch (error) {
             console.log(error)
         }
