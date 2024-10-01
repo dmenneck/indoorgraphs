@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dmenneck/indoorgraphs-package"
+    "url": "https://github.com/dmenneck/indoorgraphs"
   },
   "scripts": {
     "test": "jest",
