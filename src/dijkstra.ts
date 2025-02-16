@@ -49,6 +49,12 @@ const rightIcon = `
 </svg>
 `
 
+const uTurnIcon = `
+<svg width="19" height="14" viewBox="0 0 19 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.29289 12.9136C7.68342 13.3042 8.31658 13.3042 8.70711 12.9136L15.0711 6.54967C15.4616 6.15914 15.4616 5.52598 15.0711 5.13545C14.6805 4.74493 14.0474 4.74493 13.6569 5.13545L8 10.7923L2.34315 5.13545C1.95262 4.74493 1.31946 4.74493 0.928932 5.13545C0.538408 5.52598 0.538408 6.15914 0.928932 6.54967L7.29289 12.9136ZM19 13.25V2.25H17V13.25H19ZM17 0.25H9V2.25H17V0.25ZM7 2.25L7 12.2065H9V2.25H7ZM9 0.25C7.89543 0.25 7 1.14543 7 2.25H9H9V0.25ZM19 2.25C19 1.14543 18.1046 0.25 17 0.25V2.25H19Z" fill="black"/>
+</svg>
+`
+
 const slightlyLeftIcon = `
 <svg
   fill="black"
@@ -357,7 +363,7 @@ const icons = {
   slightlyRight: slightlyRightIcon,
   right: rightIcon,
   sharpRight: rightIcon,
-  uTurn: 0,
+  uTurn: uTurnIcon,
   sharpLeft: leftIcon,
   left: leftIcon,
   slightlyLeft: slightlyLeftIcon,
