@@ -12,6 +12,16 @@ const streetsH = require("./streetNames/streetNames-h.json")
 
 describe('routes', () => {
 
+    test("Calculation with a Graph with includingIcons true", () => {
+        const graph = new IndoorGraphs(graphA, { includeIcons: true });
+
+        try {
+            expect(() => graph.getRoute('EG_t1', 'EG_t2')).not.toThrow()
+        } catch (error) {
+            throw new Error("fails with -> " + error)
+        }
+    })
+
     test("From a to b", () => {
         const graph = new IndoorGraphs(graphA);
 
