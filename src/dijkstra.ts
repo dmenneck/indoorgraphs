@@ -748,15 +748,15 @@ const getPathType = (nodeId: string, adjacentNodeId: string, pathAttributes: any
   const pathAttributeId = adjacentNodeWithPathAttributesId[0].includes(":") && adjacentNodeWithPathAttributesId[0].split(":")[1];
   const pathTypeIndex = pathAttributesNames.indexOf("pathType");
 
-  // if none pathType provided just use gerneric "Pfadabschnitt"
-  if (!pathAttributeId || (Object.keys(pathAttributes).length > 0 && !pathAttributes[pathAttributeId][`${pathTypeIndex}`])) return "Pfadabschnitt";
+  // if none pathType provided just use gerneric "pathSection"
+  if (!pathAttributeId || (Object.keys(pathAttributes).length > 0 && !pathAttributes[pathAttributeId][`${pathTypeIndex}`])) return "pathSection";
 
-  if (Object.keys(pathAttributes).length === 0) return "Pfadabschnitt"
+  if (Object.keys(pathAttributes).length === 0) return "pathSection"
 
-  const pathType = pathAttributes[pathAttributeId][`${pathTypeIndex}`] 
-  const convertToPfadabschnitt = ["indoorPathway", "outdoorPathway", "footway"]
+  const pathType = pathAttributes[pathAttributeId][`${pathTypeIndex}`]
+  const convertToPathSection = ["indoorPathway", "outdoorPathway", "footway"]
 
-  return convertToPfadabschnitt.includes(pathType) ? "Pfadabschnitt" : pathType
+  return convertToPathSection.includes(pathType) ? "pathSection" : pathType
 }
 
 const getNodeTypes = (path: string[], nextPath: string[] ,data: any) => {
@@ -854,7 +854,7 @@ const getAdjacentPaths = (path: string[], nodes: any, pathAttributes: any, pathA
           from: 'EG_t1',
           to: 'EG_t2',
           path: [ [Array], [Array] ],
-          pathType: 'Pfadabschnitt',
+          pathType: 'pathSection',
           pathNameId: undefined,
           distance: 271,
           floors: ["EG"]
@@ -863,7 +863,7 @@ const getAdjacentPaths = (path: string[], nodes: any, pathAttributes: any, pathA
           from: 'EG_t2',
           to: 'EG_t3',
           path: [ [Array], [Array] ],
-          pathType: 'Pfadabschnitt',
+          pathType: 'pathSection',
           pathNameId: undefined,
           distance: 196,
           floors: ["EG"]
