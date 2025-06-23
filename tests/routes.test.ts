@@ -24,7 +24,7 @@ describe('routes', () => {
             expect(steps[1].instruction).toBe("Sie haben Ihr Ziel erreicht")
             expect(path.length).toBe(2)
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
     
@@ -60,7 +60,7 @@ describe('routes', () => {
   
             expect(path.length).toBe(4)
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -103,7 +103,7 @@ describe('routes', () => {
             expect(steps[5].pathType).toBe(null)
             expect(steps[5].streetName).toBe(null)
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -136,7 +136,7 @@ describe('routes', () => {
             expect(steps[3].pathType).toBe(null)
             expect(steps[3].streetName).toBe(null)
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -169,7 +169,7 @@ describe('routes', () => {
             expect(steps[3].pathType).toBe(null)
             expect(steps[3].streetName).toBe(null)
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
 
     })
@@ -185,7 +185,7 @@ describe('routes', () => {
             expect(steps[1].instruction).toBe("Rechts abbiegen")
             expect(steps[1].category).toBe("right")
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -199,7 +199,7 @@ describe('routes', () => {
             expect(steps[1].instruction).toBe("Links abbiegen")
             expect(steps[1].category).toBe("left")
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -215,7 +215,7 @@ describe('routes', () => {
 
             expect(steps[0].category).toBe("start")
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -229,7 +229,7 @@ describe('routes', () => {
             expect(steps[1].instruction).toBe("Leicht rechts abbiegen")
             expect(steps[1].category).toBe("slightlyRight")
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -243,7 +243,7 @@ describe('routes', () => {
             expect(steps[1].instruction).toBe("Leicht links abbiegen")
             expect(steps[1].category).toBe("slightlyLeft")
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -262,7 +262,7 @@ describe('routes', () => {
 
             // TODO
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -271,7 +271,7 @@ describe('routes', () => {
         try {
             const [coordinates, path, instructions, error] = graph.getRoute([6.92317, 50.92991], [6.93699, 50.92639]);
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 })

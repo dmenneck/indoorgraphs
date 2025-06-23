@@ -133,16 +133,16 @@ describe('Class methods', () => {
             },
             "pathAttributes": {}
         }
-        
+
         try {
             const graph = new IndoorGraphs(data);
 
             const { nodeAttributesOptions, pathAttributesOptions } = graph.getRoutableOptions();
-            
+
             expect(nodeAttributesOptions.doorWidth).toBe("string")
             expect(nodeAttributesOptions.isWellLit).toBe("boolean")
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -238,7 +238,7 @@ describe('Class methods', () => {
             expect(pathAttributesOptions).toBeDefined()
             expect(pathAttributesOptions.hasStairs).toBe("boolean")
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -333,19 +333,19 @@ describe('Class methods', () => {
             expect(Object.keys(pathAttributesOptions)[0]).toBe("pathWidth")
 
         } catch (error) {
-            console.log(error)
-        }     
+            throw new Error("fails with -> " + error)
+        }
     })
-  
+
     test("getNodeAttributes()", () => {
         try {
             const graph = new IndoorGraphs(dataFive);
             expect(graph.getNodeAttributes()).toBeDefined()
-            
+
             const graphProd = new IndoorGraphs(dataFiveProd);
             expect(graphProd.getNodeAttributes()).toBeDefined()
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -481,7 +481,7 @@ describe('Class methods', () => {
             expect(graph.getPathAttributes()).toBeDefined()
             expect(length).toBe(2)
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -509,7 +509,7 @@ describe('Class methods', () => {
         try {
             const [coordinates, path, instructions, error] = graph.getRoute('UG_t1', 'UG_t2');
         } catch (error) {
-            console.log(error)
+            throw new Error("fails with -> " + error)
         }
     })
 })

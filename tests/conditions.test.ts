@@ -50,7 +50,7 @@ describe('Conditions', () => {
             graph.removeNodes([["doorWidth === 200"]]);
             expect(graph.getRoute('UG_t1', 'UG_t2')[3]).toBe("Node UG_t1 is not present in the graph.")
         } catch (error) {
-            console.log(error.message)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -102,7 +102,7 @@ describe('Conditions', () => {
             graph.removeNodes([["doorWidth > 190"]]);
             expect(graph.getRoute('UG_t1', 'UG_t2')[3]).toBe("Node UG_t1 is not present in the graph.")
         } catch (error) {
-            console.log(error.message)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -147,14 +147,14 @@ describe('Conditions', () => {
                 }
             }
         }
-        
+
         const graph = new IndoorGraphs(data);
 
         try {
             graph.removeNodes([["doorWidth < 190"]]);
             expect(graph.getRoute('UG_t1', 'UG_t2')[3]).toBe(undefined)
         } catch (error) {
-            console.log(error.message)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -199,14 +199,14 @@ describe('Conditions', () => {
                 }
             }
         }
-        
+
         const graph = new IndoorGraphs(data);
 
         try {
             graph.removeNodes([["doorWidth < 190"]]);
             expect(graph.getRoute('UG_t1', 'UG_t2')[3]).toBe(undefined)
         } catch (error) {
-            console.log(error.message)
+            throw new Error("fails with -> " + error)
         }
     })
 
@@ -252,14 +252,14 @@ describe('Conditions', () => {
                 }
             }
         }
-        
+
         const graph = new IndoorGraphs(data);
 
         try {
             graph.removeNodes([["doorWidth < 190", "||", "wellLit === true"]]);
             expect(graph.getRoute('UG_t1', 'UG_t2')[3]).toBe("Node UG_t1 is not present in the graph.")
         } catch (error) {
-            console.log(error.message)
+            throw new Error("fails with -> " + error)
         }
     })
 })
