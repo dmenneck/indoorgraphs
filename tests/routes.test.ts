@@ -32,7 +32,7 @@ describe('routes', () => {
 
             expect(steps[0].category).toBe("start")
             expect(steps[0].distance).toBe(375)
-            expect(steps[0].pathType).toBe("Pfadabschnitt")
+            expect(steps[0].pathType).toBe("pathSection")
             expect(steps[1].category).toBe("arrived")
             expect(path.length).toBe(2)
         } catch (error) {
@@ -51,7 +51,7 @@ describe('routes', () => {
 
             expect(steps[0].distance).toBe(427)
             expect(steps[0].category).toBe("start")
-            expect(steps[0].pathType).toBe("Pfadabschnitt")
+            expect(steps[0].pathType).toBe("pathSection")
             expect(steps[0].streetName).toBe(null);
 
             // Betrete das Gebäude / Betrete den Raum
@@ -61,7 +61,7 @@ describe('routes', () => {
 
             expect(steps[2].distance).toBe(196)
             expect(steps[2].category).toBe("follow")
-            expect(steps[2].pathType).toBe("Pfadabschnitt")
+            expect(steps[2].pathType).toBe("pathSection")
             expect(steps[2].streetName).toBe(null)
 
             expect(steps[3].category).toBe("arrived")
@@ -84,7 +84,7 @@ describe('routes', () => {
 
             expect(steps[0].distance).toBe(607)
             expect(steps[0].category).toBe("start")
-            expect(steps[0].pathType).toBe("Pfadabschnitt")
+            expect(steps[0].pathType).toBe("pathSection")
             expect(steps[0].streetName).toBe(null);
 
             expect(steps[1].category).toBe("right")
@@ -92,7 +92,7 @@ describe('routes', () => {
             expect(steps[1].streetName).toBe(null)
 
             expect(steps[2].category).toBe("follow")
-            expect(steps[2].pathType).toBe("Pfadabschnitt")
+            expect(steps[2].pathType).toBe("pathSection")
             expect(steps[2].streetName).toBe(null)
 
             // Betrete Raum
@@ -102,7 +102,7 @@ describe('routes', () => {
 
             expect(steps[4].distance).toBe(195)
             expect(steps[4].category).toBe("follow")
-            expect(steps[4].pathType).toBe("Pfadabschnitt")
+            expect(steps[4].pathType).toBe("pathSection")
             expect(steps[4].streetName).toBe(null)
 
             expect(steps[5].category).toBe("arrived")
@@ -155,7 +155,7 @@ describe('routes', () => {
 
             expect(steps[0].distance).toBe(56)
             expect(steps[0].category).toBe("start")
-            expect(steps[0].pathType).toBe("Pfadabschnitt")
+            expect(steps[0].pathType).toBe("pathSection")
             expect(steps[0].streetName).toBe(null);
 
             expect(steps[1].category).toBe("follow")
@@ -164,7 +164,7 @@ describe('routes', () => {
 
             expect(steps[2].distance).toBe(4)
             expect(steps[2].category).toBe("follow")
-            expect(steps[2].pathType).toBe("Pfadabschnitt")
+            expect(steps[2].pathType).toBe("pathSection")
             expect(steps[2].streetName).toBe(null)
 
             expect(steps[3].category).toBe("arrived")
@@ -211,7 +211,7 @@ describe('routes', () => {
             const steps = instructions.steps;
 
             expect(steps[0].category).toBe("start")
-            expect(steps[0].pathType).toBe("Pfadabschnitt")
+            expect(steps[0].pathType).toBe("pathSection")
             expect(steps[0].distance).toBe(58)
             expect(steps[1].category).toBe("arrived")
 
