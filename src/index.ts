@@ -85,7 +85,6 @@ exports.IndoorGraphs = class IndoorGraphs {
   data: any;
   includeIcons: boolean;
   pathNameIds: StreetMap;
-  lang: string;
   conditions: any;
 
   constructor(data: Data, options: SecondArgument = {
@@ -207,14 +206,9 @@ exports.IndoorGraphs = class IndoorGraphs {
    * Calculate shortest path between start and dest locations
    * start | dest: can be node ids or coordinates
    * match (optional): { matchLayer, matchOn: string } array of room polygons of one floor to match to, each room must have room entrance in the graph
-   * lang: string of language code, such as "de", "en"
   */
-  getRoute (start: string | number[], dest: string | number[], options: any = { match: undefined, lang: "de" }) {
-    const { match, lang } = options;
-
-    // default language = en
-    if (!lang) this.lang = "en";
-    else this.lang = lang
+  getRoute (start: string | number[], dest: string | number[], options: any = { match: undefined }) {
+    const { match } = options;
 
     if (!this.data) return false
 
@@ -275,7 +269,7 @@ exports.IndoorGraphs = class IndoorGraphs {
       destId = "matchedTempDest"
     }
 
-    const shortestPath: any = getShortestPath(graph, data, `${startId}`, `${destId}`, this.includeIcons, this.pathNameIds, lang);
+    const shortestPath: any = getShortestPath(graph, data, `${startId}`, `${destId}`, this.includeIcons, this.pathNameIds);
 
     // remove "floorChangeWithStairsOrElevator" if only one floor
     if (shortestPath[2].hasOwnProperty("floors") && shortestPath[2].hasOwnProperty("floorChangeWithStairsOrElevator")) {
