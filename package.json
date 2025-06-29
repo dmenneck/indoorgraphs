@@ -1,6 +1,6 @@
 {
   "name": "indoorgraphs",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "",
   "main": "./dist/index.js",
   "exports": {
@@ -24,6 +24,11 @@
   ],
   "author": "Dirk Mennecke",
   "license": "ISC",
+  "standard": {
+    "ignore": [
+      "dist/"
+    ]
+  },
   "dependencies": {
     "@turf/turf": "^6.5.0",
     "fast-deep-equal": "^3.1.3",

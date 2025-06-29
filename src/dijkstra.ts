@@ -722,7 +722,7 @@ const calculateInstructions = (path: any, data: any, includeIcons: boolean, path
   const instructions = getRoutingInstructions(combinedPaths, pathNameIds, path, dataWithAttributes)
 
   // @ts-ignore
-  if (includeIcons) finalData["icons"] = icons;
+  if (includeIcons) instructions["icons"] = icons;
 
   return {
     ...instructions,
