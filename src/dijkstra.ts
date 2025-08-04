@@ -267,7 +267,7 @@ const getDistance = (from: any, to: any) => {
   return Math.round(turf.distance(from, to, options))
 }
 
-const getShortestPath = (data: any, dataWithAttributes: any, start: any, finish: any, includeIcons: boolean, pathNameIds: StreetMap, lang: string) => {
+const getShortestPath = (data: any, dataWithAttributes: any, start: any, finish: any, includeIcons: boolean, pathNameIds: StreetMap) => {
   const graph = new WeightedGraph();
   const nodes = data;
 
@@ -284,8 +284,8 @@ const getShortestPath = (data: any, dataWithAttributes: any, start: any, finish:
 
   const path = graph.Dijkstra(start, finish);
   const lineString: any = [];
-  
-  const routingInstructions = calculateInstructions(path, data, includeIcons, pathNameIds, dataWithAttributes, start, finish, lang);
+
+  const routingInstructions = calculateInstructions(path, data, includeIcons, pathNameIds, dataWithAttributes, start, finish);
 
   // map over path to get semantics and stuff
   path.map((node, index) => {
@@ -303,7 +303,7 @@ function getDirection (from:any, to: any) {
     )
 }
 
-const getTurnType = (from: any, to: any, lang: string) => {
+const getTurnType = (from: any, to: any) => {
   // let instruction;
 
   function getTurnInstruction(direction1: string, direction2: string) {
@@ -331,31 +331,28 @@ const getTurnType = (from: any, to: any, lang: string) => {
     const angle = (360 + compass[direction2] - compass[direction1]) % 360;
 
     // Determine the turn instruction based on the angle.
-    if (angle >= 0 && angle < 22.5) {
-        // return [lang === "de" ? "Weiter" : "Continue", "straight"];
+    if ((angle >= 0 && angle < 22.5) || angle > 337.5) {
+        // return false since this is not considered a turn.
+        return false
     } else if (angle >= 22.5 && angle < 67.5) {
-        return [lang === "de" ? "Leicht rechts abbiegen" :"Turn slightly right", "slightlyRight"];
+        return "slightlyRight";
     } else if (angle >= 67.5 && angle < 112.5) {
-        return [lang === "de" ? "Rechts abbiegen" : "Turn right", "right"];
+        return "right";
     } else if (angle >= 112.5 && angle < 157.5) {
-        return [lang === "de" ? "Scharf rechts abbiegen" : "Turn sharp right", "sharpRight"];
+        return "sharpRight";
     } else if (angle >= 157.5 && angle < 202.5) {
-        return [lang === "de" ? "Umdrehen" : "Make a U-turn", "uTurn"];
+        return "uTurn";
     } else if (angle >= 202.5 && angle < 247.5) {
-        return [lang === "de" ? "Scharf links abbiegen" : "Turn sharp left", "sharpLeft"];
+        return "sharpLeft";
     } else if (angle >= 247.5 && angle < 292.5) {
-        return [lang === "de" ? "Links abbiegen" : "Turn left", "left"];
+        return "left";
     } else if (angle >= 292.5 && angle < 337.5) {
-        return [lang === "de" ? "Leicht links abbiegen" : "Turn slightly left", "slightlyLeft"];
-    } else {
-        // return [lang === "de" ? "Scharf rechts abbiegen" : "Turn sharp left", "sharpLeft"];
-
-        return [lang === "de" ? "Leicht links abbiegen" : "Turn slightly left", "slightlyLeft"];
+        return "slightlyLeft";
     }
   }
 
-  const instruction = getTurnInstruction(from, to);
-  return instruction;
+  const turnType = getTurnInstruction(from, to);
+  return turnType;
 }
 
 const icons = {
@@ -415,8 +412,8 @@ const getRoutingInstructions = (steps: any, pathNameIds: any, path: any, data: a
       }
 
       routingInstructions.push({
-        instruction: follow(streetName, step.distance, step.pathType, "de", null, floors),
         category: "start",
+        distance: step.distance,
         pathType: step.pathType,
         streetName: streetName,
         floors,
@@ -431,30 +428,24 @@ const getRoutingInstructions = (steps: any, pathNameIds: any, path: any, data: a
     if (index > 0 && steps[index + 1]) {
       if (step.type === "entrance") {
         routingInstructions.push({
-          instruction: entrance("de", step.entranceType),
-          category: "entrance",
+          category: step.entranceType === "buildingEntrance" ? "buildingEntrance" : "entrance",
           pathType: null,
           streetName: null,
           floors,
         })
-        
+
         updatedNodeIdsPerInstruction[count] = [step.node];
         updatedPathCoordinatesPerInstruction[count] = [step.coordinates]
         increaseCount()
       }
 
       if (step.type === "turn") {
-        let turnInstruction = step.turnType[0];
-
-        if (streetNameNext) turnInstruction = turn(turnInstruction, streetNameNext, "de")
-        // routingInstructions.push([turnInstruction, turnType[1], pathType,  floors]);
-
         // turns are just points and hence dont include a pathtype or streetname
         routingInstructions.push({
-          instruction: turnInstruction,
-          category: step.turnType[1],
+          category: step.turnType,
           pathType: null,
           streetName: null,
+          streetNameNext: streetNameNext,
           floors,
         })
 
@@ -467,8 +458,8 @@ const getRoutingInstructions = (steps: any, pathNameIds: any, path: any, data: a
         pathLength = pathLength + step.distance;
 
         routingInstructions.push({
-          instruction: follow(streetName, step.distance, step.pathType, "de", null, floors),
           category: "follow",
+          distance: step.distance,
           pathType: step.pathType,
           streetName: streetName,
           floors,
@@ -493,8 +484,8 @@ const getRoutingInstructions = (steps: any, pathNameIds: any, path: any, data: a
         }
 
         const instruction = {
-          instruction: follow(streetName, step.distance, step.pathType, "de", null, floors),
           category: "follow",
+          distance: step.distance,
           pathType: step.pathType,
           streetName,
           floors,
@@ -511,7 +502,6 @@ const getRoutingInstructions = (steps: any, pathNameIds: any, path: any, data: a
       }
   
       routingInstructions.push({
-        instruction: arrived("de"),
         category: "arrived",
         pathType: null,
         streetName: null,
@@ -570,15 +560,6 @@ const checkIfSameInstructionBug = (obj1: any, obj2: any) => {
   return true;
 }
 
-const entrance = (lang: string, entranceType: string) => {
-  let instruction = "";
-  if (lang === "de") {
-    instruction = entranceType === "building" ? "Betrete das Gebäude" : "Durchquere die Tür"
-  } 
-
-  return instruction;
-}
-
 const getEntranceType = (node: string, nodeAttributesNames: any, na: any) => {
   const indexEntranceType = nodeAttributesNames.indexOf("entranceType");
 
@@ -618,8 +599,8 @@ const getTurns = (path: any, pathCoordinates: number[][]) => {
 
       const directionA = getDirection(lastNodeCoordinates, coordinates);
       const directionB = getDirection(coordinates, nextNodeCoordinates);
-      
-      const turnType =  getTurnType(directionA, directionB, "de");
+
+      const turnType =  getTurnType(directionA, directionB);
 
       if (turnType) turns[path[index]] = turnType;
     }
@@ -704,7 +685,7 @@ const combinePaths = (insertedTurnsAndEntrances: any) => {
   return result;
 }
 
-const calculateInstructions = (path: any, data: any, includeIcons: boolean, pathNameIds: StreetMap, dataWithAttributes: any, start: any, finish: any, lang: string) => {
+const calculateInstructions = (path: any, data: any, includeIcons: boolean, pathNameIds: StreetMap, dataWithAttributes: any, start: any, finish: any) => {
   const nodes = dataWithAttributes.nodes;
   const pathAttributes = dataWithAttributes.pa;
   const pathAttributesNames = dataWithAttributes.pan;  
@@ -767,54 +748,15 @@ const getPathType = (nodeId: string, adjacentNodeId: string, pathAttributes: any
   const pathAttributeId = adjacentNodeWithPathAttributesId[0].includes(":") && adjacentNodeWithPathAttributesId[0].split(":")[1];
   const pathTypeIndex = pathAttributesNames.indexOf("pathType");
 
-  // if none pathType provided just use gerneric "Pfadabschnitt"
-  if (!pathAttributeId || (Object.keys(pathAttributes).length > 0 && !pathAttributes[pathAttributeId][`${pathTypeIndex}`])) return "Pfadabschnitt";
+  // if none pathType provided just use gerneric "pathSection"
+  if (!pathAttributeId || (Object.keys(pathAttributes).length > 0 && !pathAttributes[pathAttributeId][`${pathTypeIndex}`])) return "pathSection";
 
-  if (Object.keys(pathAttributes).length === 0) return "Pfadabschnitt"
+  if (Object.keys(pathAttributes).length === 0) return "pathSection"
 
-  const pathType = pathAttributes[pathAttributeId][`${pathTypeIndex}`] 
-  const convertToPfadabschnitt = ["indoorPathway", "outdoorPathway", "footway"]
+  const pathType = pathAttributes[pathAttributeId][`${pathTypeIndex}`]
+  const convertToPathSection = ["indoorPathway", "outdoorPathway", "footway"]
 
-  return convertToPfadabschnitt.includes(pathType) ? "Pfadabschnitt" : pathType
-}
-
-const follow = (pathName: string, distance: number, pathType: string, lang: string, nodesTypes: string[], floors: any) => {
-  const removedUndefinesNodesTypes = nodesTypes && nodesTypes.filter((type) => type)
-  const isDoor = removedUndefinesNodesTypes && removedUndefinesNodesTypes[0] === "door";
-  const isElevator = removedUndefinesNodesTypes && removedUndefinesNodesTypes.length > 0 && removedUndefinesNodesTypes.every(item => item === "elevator");
-
-  // wenn erster nodeType elevator ist und die nächsten nicht, dann
-  // "verlassen sie den aufzug und ..."
-
-  if (lang === "en") {
-    return `Follow ${pathName ? pathName : pathType} for ${distance} meters`
-  } else {
-
-    if (isDoor) {
-      return `Durchquere die ${isDoor ? "Tür" : ""} und folge ${pathName ? pathName : pathType} für ${distance} Meter`
-    } else if (isElevator || pathType === "elevator") {
-      return `Fahre mit dem Aufzug zum ${floors.at(-1)}`
-    }
-    else {
-      return `Folge ${pathName ? pathName : pathType} für ${distance} Meter`
-  }
-  }
-}
-
-const turn = (turnInstruction: string, streetNameNext: string, lang: string) => {
-  if (lang === "en") {
-    return `${turnInstruction} onto ${streetNameNext}`
-  } else {
-    return `${turnInstruction} auf ${streetNameNext}`
-  }
-}
-
-const arrived = (lang: string) => {
-  if (lang === "en") {
-    return "You have reached your destination" 
-  } else {
-    return "Sie haben Ihr Ziel erreicht"
-  }
+  return convertToPathSection.includes(pathType) ? "pathSection" : pathType
 }
 
 const getNodeTypes = (path: string[], nextPath: string[] ,data: any) => {
@@ -912,7 +854,7 @@ const getAdjacentPaths = (path: string[], nodes: any, pathAttributes: any, pathA
           from: 'EG_t1',
           to: 'EG_t2',
           path: [ [Array], [Array] ],
-          pathType: 'Pfadabschnitt',
+          pathType: 'pathSection',
           pathNameId: undefined,
           distance: 271,
           floors: ["EG"]
@@ -921,7 +863,7 @@ const getAdjacentPaths = (path: string[], nodes: any, pathAttributes: any, pathA
           from: 'EG_t2',
           to: 'EG_t3',
           path: [ [Array], [Array] ],
-          pathType: 'Pfadabschnitt',
+          pathType: 'pathSection',
           pathNameId: undefined,
           distance: 196,
           floors: ["EG"]
