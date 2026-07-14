@@ -1,65 +1,96 @@
-const { saveGraph, exportForProductionBuild, getRoutableOptions, matchToNearestPath } = require('./helpers')
-const { getShortestPath } = require('./dijkstra');
+import {
+  saveGraph,
+  exportForProductionBuild,
+  getRoutableOptions,
+  matchToNearestPath,
+} from "./helpers";
+import { getShortestPath } from "./dijkstra";
 
 interface Data {
-  [key: string]: any
+  [key: string]: any;
+}
+
+interface ProductionGraph {
+  nodes: any;
+  nan: string;
+  na: any;
+  pa: any;
+  pan: string[];
 }
 
 const validateData = (graph: any) => {
   let invalidProperties: any = null;
 
   // check if user passed nothing or no object
-  if (!graph || typeof graph !== "object") return { invalid: true, message: "Please provide a valid indoor graph." };
+  if (!graph || typeof graph !== "object")
+    return { invalid: true, message: "Please provide a valid indoor graph." };
 
   // prod graph
   if (graph.hasOwnProperty("nan")) {
     // todo
 
-    return invalidProperties ? invalidProperties : { invalid: false, message: null };
-  } 
+    return invalidProperties
+      ? invalidProperties
+      : { invalid: false, message: null };
+  }
 
   // check if structure of passed graph is not {graph: {}, pathAttributes: {}}
-  if (!graph.hasOwnProperty("nodes") || !graph.hasOwnProperty("pathAttributes")) return { invalid: true, message: "Graph is not of type {nodes: {}, pathAttributes: {}}. Please provide a valid indoor graph." };
+  if (!graph.hasOwnProperty("nodes") || !graph.hasOwnProperty("pathAttributes"))
+    return {
+      invalid: true,
+      message:
+        "Graph is not of type {nodes: {}, pathAttributes: {}}. Please provide a valid indoor graph.",
+    };
 
   // check if user passed no nodes
-  if (Object.keys(graph.nodes).length === 0) return { invalid: true, message: "Please provide nodes." };
+  if (Object.keys(graph.nodes).length === 0)
+    return { invalid: true, message: "Please provide nodes." };
 
   // check for valid properties
-  Object.entries(graph.nodes).map(([id, properties]) => {
+  Object.entries(graph.nodes).forEach(([id, properties]) => {
     // only account for valid nodes, not temporary map matching nodes
-    if (id === "matchedTempStart" || id === "matchedTempDest" ) return;
+    if (id === "matchedTempStart" || id === "matchedTempDest") return;
 
-    const keys = ["coordinates", "id",  "level", "adjacentNodes"]
+    const nodeProperties = properties as Record<string, any>;
+    const keys = ["coordinates", "id", "level", "adjacentNodes"];
     // check for valid keys
-    keys.map(key => {
-      if (!properties.hasOwnProperty(key)) {
-        invalidProperties = { invalid: true, message: `node ${id} is missing property "${key}"` };
+    keys.forEach((key) => {
+      if (!nodeProperties.hasOwnProperty(key)) {
+        invalidProperties = {
+          invalid: true,
+          message: `node ${id} is missing property "${key}"`,
+        };
       }
-    })
-    // check for valid value types    
-  })
- 
+    });
+    // check for valid value types
+  });
+
   // todo: validate path attributes
-  return invalidProperties ? invalidProperties : { invalid: false, message: null };
-}
+  return invalidProperties
+    ? invalidProperties
+    : { invalid: false, message: null };
+};
 
 export interface StreetMap {
   [key: number]: string;
 }
 
 interface SecondArgument {
-  includeIcons: boolean,
+  includeIcons: boolean;
   pathNameIds: StreetMap;
 }
 
-const getProductionBuild = (data: any, streetIds: any) => {
-  const exportGraph = exportForProductionBuild(data, streetIds);
+const getProductionBuild = (data: any, streetIds: any): ProductionGraph => {
+  const exportGraph = exportForProductionBuild(
+    data,
+    streetIds,
+  ) as ProductionGraph;
 
   return exportGraph;
-}
+};
 
 const getRoomEntranceNodes = (graph: any, roomNumber: string) => {
-  const belongsToRoomIndex = graph.nan?.indexOf('belongsToRoom');
+  const belongsToRoomIndex = graph.nan?.indexOf("belongsToRoom");
 
   const entrances: string[] = [];
 
@@ -78,19 +109,21 @@ const getRoomEntranceNodes = (graph: any, roomNumber: string) => {
   return entrances;
 };
 
-exports.getRoomEntranceNodes = getRoomEntranceNodes;
-exports.getProductionBuild = getProductionBuild;
+export { getRoomEntranceNodes, getProductionBuild };
 
-exports.IndoorGraphs = class IndoorGraphs {
+export class IndoorGraphs {
   data: any;
   includeIcons: boolean;
   pathNameIds: StreetMap;
   conditions: any;
 
-  constructor(data: Data, options: SecondArgument = {
-    includeIcons: false,
-    pathNameIds: null
-  }) {
+  constructor(
+    data: Data,
+    options: SecondArgument = {
+      includeIcons: false,
+      pathNameIds: {} as StreetMap,
+    },
+  ) {
     const { invalid, message } = validateData(data);
 
     if (invalid) {
@@ -103,8 +136,8 @@ exports.IndoorGraphs = class IndoorGraphs {
     this.pathNameIds = pathNameIds;
     this.conditions = {
       nodeRemovalConditions: [],
-      edgeRemovalConditions: []
-    } 
+      edgeRemovalConditions: [],
+    };
     this.data = data;
   }
 
@@ -116,55 +149,61 @@ exports.IndoorGraphs = class IndoorGraphs {
     return this.conditions.edgeRemovalConditions;
   }
 
-  getData () {
-    return this.data
+  getData() {
+    return this.data;
   }
 
-  getNodeAttributes () {
-    const prodBuild = getProductionBuild(this.data, null)
+  getNodeAttributes() {
+    const prodBuild = getProductionBuild(this.data, null);
 
-    if (this.isProdBuild(this.data)) return { nodeAttributes: prodBuild.na, nodeAttributeNames: prodBuild.nan }
+    if (this.isProdBuild(this.data))
+      return {
+        nodeAttributes: prodBuild.na,
+        nodeAttributeNames: prodBuild.nan,
+      };
     else {
       // todo: extract node attributes
-      return this.data
+      return this.data;
     }
   }
 
-  getPathAttributes () {
+  getPathAttributes() {
     const pathAttributes = Object.keys(this.data.pathAttributes);
 
     if (pathAttributes.length > 0 && pathAttributes[0].includes("-")) {
       // if the provided nodes are not production ready, convert to prod build first
       const prodBuild = getProductionBuild(this.data, null);
 
-      return prodBuild.pa
+      return prodBuild.pa;
     } else {
-      return this.data.pathAttributes
+      return this.data.pathAttributes;
     }
   }
 
   // returns all the attributes present in the graph
   // these can be utilized to request accessible paths
-  getRoutableOptions (options: any) {
+  getRoutableOptions(options: any) {
     const exclude = options?.exclude;
 
-    // differentiate if user provided dev or prod build    
+    // differentiate if user provided dev or prod build
     // todo: write test if user passed prod build
     const isProdBuild = this.isProdBuild(this.data);
-    const routableOptions = getRoutableOptions(isProdBuild ? this.data : getProductionBuild(this.data, null), exclude) 
+    const routableOptions = getRoutableOptions(
+      isProdBuild ? this.data : getProductionBuild(this.data, null),
+      exclude,
+    );
 
-    return routableOptions   
+    return routableOptions;
   }
 
-  setData (data: Data) {
+  setData(data: Data) {
     const { invalid, message } = validateData(data);
 
     if (!data || invalid || !data["nodes"] || Object.keys(data).length === 0) {
-
-      return message
+      return message;
     }
 
-    this.data = data
+    this.data = data;
   }
 
   // Removes nodes from the graph that match the specified condition.
@@ -178,8 +217,13 @@ exports.IndoorGraphs = class IndoorGraphs {
   }
 
   private isProdBuild(graph: any) {
+    const firstNode = Object.values(graph.nodes)[0] as
+      | Record<string, any>
+      | undefined;
+
     // if the nodes have the attribute "coordinates", then its the dev build
-    if (Object.keys(Object.values(graph.nodes)[0]).includes("coordinates")) return false
+    if (!firstNode) return true;
+    if (Object.keys(firstNode).includes("coordinates")) return false;
     else return true;
   }
 
@@ -188,7 +232,7 @@ exports.IndoorGraphs = class IndoorGraphs {
 
     // check if user provided valid node id or coordinates
     if (node.length === 2 && typeof node === "object") {
-      id = `matchedTemp${type}`
+      id = `matchedTemp${type}`;
     }
 
     if (!data || !data[id]) {
@@ -198,19 +242,23 @@ exports.IndoorGraphs = class IndoorGraphs {
     return true;
   }
 
-  constructErrorMessage (message: string) {
-    return [undefined, undefined, undefined, message]
+  constructErrorMessage(message: string) {
+    return [undefined, undefined, undefined, message];
   }
 
   /*
    * Calculate shortest path between start and dest locations
    * start | dest: can be node ids or coordinates
    * match (optional): { matchLayer, matchOn: string } array of room polygons of one floor to match to, each room must have room entrance in the graph
-  */
-  getRoute (start: string | number[], dest: string | number[], options: any = { match: undefined }) {
+   */
+  getRoute(
+    start: string | number[],
+    dest: string | number[],
+    options: any = { match: undefined },
+  ) {
     const { match } = options;
 
-    if (!this.data) return false
+    if (!this.data) return false;
 
     if (!start || !dest) {
       return this.constructErrorMessage("Please enter a start and destination");
@@ -223,14 +271,13 @@ exports.IndoorGraphs = class IndoorGraphs {
     if (typeof start === "object" || start.length === 2) {
       // @ts-ignore
       const updatedGraph = this.matchToNearestPath(start, data, "Start", match);
-      if (!updatedGraph.error) data = updatedGraph
+      if (!updatedGraph.error) data = updatedGraph;
       else return this.constructErrorMessage(updatedGraph.message);
     }
 
     // test!!!
     // @ts-ignore
     if (typeof dest === "object" || dest.length === 2) {
-
       // @ts-ignore
       const updatedGraph = this.matchToNearestPath(dest, data, "Dest", match);
       if (!updatedGraph.error) data = updatedGraph;
@@ -239,51 +286,72 @@ exports.IndoorGraphs = class IndoorGraphs {
 
     // check if nodes are prod nodes or dev nodes
     if (!this.data.na || !this.data.nan) {
-      console.log("The graph you've provided is not production ready. To calculate a graph more quickly create a production build using getProductionBuild() and pass the data to a new IndoorGraphs.")
-      data = exportForProductionBuild(this.data);
+      console.log(
+        "The graph you've provided is not production ready. To calculate a graph more quickly create a production build using getProductionBuild() and pass the data to a new IndoorGraphs.",
+      );
+      data = exportForProductionBuild(this.data, null);
     }
 
     // important: the following steps always use the production build
 
+    const graphResult = saveGraph(data, this.conditions);
+    if (!graphResult)
+      return this.constructErrorMessage("Failed to save the graph!");
+
     // save graph
-    const [graph, excludedNodes, excludedPaths] = saveGraph(data, this.conditions);
+    const [graph, excludedNodes, excludedPaths] = graphResult;
 
     // @ts-ignore
     if (!this.isNodeValid(graph, start, "Start")) {
-      return this.constructErrorMessage(`Node ${start} is not present in the graph.`)
+      return this.constructErrorMessage(
+        `Node ${start} is not present in the graph.`,
+      );
     }
 
     // @ts-ignore
     if (!this.isNodeValid(graph, dest, "Dest")) {
-      return this.constructErrorMessage(`Node ${dest} is not present in the graph.`)
+      return this.constructErrorMessage(
+        `Node ${dest} is not present in the graph.`,
+      );
     }
 
     // get valid start/dest node ids
     let startId = start;
     let destId = dest;
     if (start.length === 2 && typeof start === "object") {
-      startId = "matchedTempStart"
+      startId = "matchedTempStart";
     }
 
     if (dest.length === 2 && typeof dest === "object") {
-      destId = "matchedTempDest"
+      destId = "matchedTempDest";
     }
 
-    const shortestPath: any = getShortestPath(graph, data, `${startId}`, `${destId}`, this.includeIcons, this.pathNameIds);
+    const shortestPath: any = getShortestPath(
+      graph,
+      data,
+      `${startId}`,
+      `${destId}`,
+      this.includeIcons,
+      this.pathNameIds,
+    );
 
     // remove "floorChangeWithStairsOrElevator" if only one floor
-    if (shortestPath[2].hasOwnProperty("floors") && shortestPath[2].hasOwnProperty("floorChangeWithStairsOrElevator")) {
+    if (
+      shortestPath[2].hasOwnProperty("floors") &&
+      shortestPath[2].hasOwnProperty("floorChangeWithStairsOrElevator")
+    ) {
       // @ts-ignore
-      if (shortestPath[2] && shortestPath[2]?.floors?.length === 1) delete shortestPath[2].floorChangeWithStairsOrElevator
+      if (shortestPath[2] && shortestPath[2]?.floors?.length === 1)
+        delete shortestPath[2].floorChangeWithStairsOrElevator;
     }
 
     // check if path has more than one node
     if (shortestPath[1] && shortestPath[1]?.length === 1) {
-      return this.constructErrorMessage(`No path found.`)
+      return this.constructErrorMessage(`No path found.`);
     }
 
-    if (shortestPath[2]) shortestPath[2]["excludedNodes"] = excludedNodes
-    if (shortestPath[2]) shortestPath[2]["excludedPaths"] = excludedPaths
+    if (shortestPath[2]) shortestPath[2]["excludedNodes"] = excludedNodes;
+    if (shortestPath[2]) shortestPath[2]["excludedPaths"] = excludedPaths;
 
     return shortestPath;
   }
@@ -291,34 +359,53 @@ exports.IndoorGraphs = class IndoorGraphs {
   /*
    * Input: location lat long, optional: match layer and attribute
    * Output: location along a path
-   * 
+   *
    * This function matches the selected location to the nearest point in the graph
-  */
-  private matchToNearestPath(coordinates: number[], nodes: any, type: string, match: any) {
-    return matchToNearestPath(nodes, coordinates, type, match, this.pathNameIds);
+   */
+  private matchToNearestPath(
+    coordinates: number[],
+    nodes: any,
+    type: string,
+    match: any,
+  ) {
+    return matchToNearestPath(
+      nodes,
+      coordinates,
+      type,
+      match,
+      this.pathNameIds,
+    );
   }
 
   addGraph(graph: any) {
-
-    if (!graph || !Object.keys(graph).includes("nodes")
-      || !Object.keys(graph).includes("nan")
-    || !Object.keys(graph).includes("na")
-    || !Object.keys(graph).includes("pa")
-    || !Object.keys(graph).includes("pan")) {
-      return this.constructErrorMessage("Please provide a valid production graph.")
+    if (
+      !graph ||
+      !Object.keys(graph).includes("nodes") ||
+      !Object.keys(graph).includes("nan") ||
+      !Object.keys(graph).includes("na") ||
+      !Object.keys(graph).includes("pa") ||
+      !Object.keys(graph).includes("pan")
+    ) {
+      return this.constructErrorMessage(
+        "Please provide a valid production graph.",
+      );
     }
 
-    let combinedPathAttributeNames: any = [...graph.pan, ...this.data.pan]
-    let combinedNodeAttributeNames: any = [...graph.nan, ...this.data.nan]
+    let combinedPathAttributeNames: any = [...graph.pan, ...this.data.pan];
+    let combinedNodeAttributeNames: any = [...graph.nan, ...this.data.nan];
 
-    // remove duplicates 
-    const uniques = combinedNodeAttributeNames.filter((x: any, i: any) => i === combinedNodeAttributeNames.indexOf(x))
-    const uniquesPathAttributeNames = combinedPathAttributeNames.filter((x: any, i: any) => i === combinedPathAttributeNames.indexOf(x))
+    // remove duplicates
+    const uniques = combinedNodeAttributeNames.filter(
+      (x: any, i: any) => i === combinedNodeAttributeNames.indexOf(x),
+    );
+    const uniquesPathAttributeNames = combinedPathAttributeNames.filter(
+      (x: any, i: any) => i === combinedPathAttributeNames.indexOf(x),
+    );
 
     const pathAttributesA = this.data.pa;
     const pathAttributesB = graph.pa;
 
-    const combinedNodeAttributes: any = {}
+    const combinedNodeAttributes: any = {};
     const nodeAttributesA = this.data.na;
     const nodeAttributesB = graph.na;
     const nanA = this.data.nan;
@@ -329,24 +416,26 @@ exports.IndoorGraphs = class IndoorGraphs {
 
       Object.entries(nodeAttributesA).map(([nodeAId, valuesA]: any) => {
         if (attributeAIndex > -1) {
-          if (!combinedNodeAttributes.hasOwnProperty(nodeAId)) combinedNodeAttributes[nodeAId] = {}
-          
-           combinedNodeAttributes[nodeAId][index] = valuesA[attributeAIndex]
+          if (!combinedNodeAttributes.hasOwnProperty(nodeAId))
+            combinedNodeAttributes[nodeAId] = {};
+
+          combinedNodeAttributes[nodeAId][index] = valuesA[attributeAIndex];
         }
-      })
+      });
 
       const attributeBIndex = nanB.indexOf(name);
 
       Object.entries(nodeAttributesB).map(([nodeBId, valuesB]: any) => {
         if (attributeBIndex > -1) {
-          if (!combinedNodeAttributes.hasOwnProperty(nodeBId)) combinedNodeAttributes[nodeBId] = {}
+          if (!combinedNodeAttributes.hasOwnProperty(nodeBId))
+            combinedNodeAttributes[nodeBId] = {};
 
-          combinedNodeAttributes[nodeBId][index] = valuesB[attributeBIndex]
+          combinedNodeAttributes[nodeBId][index] = valuesB[attributeBIndex];
         }
-      })
-    })
+      });
+    });
 
-    const combinedPathAttributes: any = {}
+    const combinedPathAttributes: any = {};
     const panA = this.data.pan;
     const panB = graph.pan;
 
@@ -355,50 +444,53 @@ exports.IndoorGraphs = class IndoorGraphs {
 
       Object.entries(pathAttributesA).map(([pathAId, valuesA]: any) => {
         if (attributeAIndex > -1) {
-          if (!combinedPathAttributes.hasOwnProperty(pathAId)) combinedPathAttributes[pathAId] = {}
+          if (!combinedPathAttributes.hasOwnProperty(pathAId))
+            combinedPathAttributes[pathAId] = {};
 
-          combinedPathAttributes[pathAId][index] = valuesA[attributeAIndex]
+          combinedPathAttributes[pathAId][index] = valuesA[attributeAIndex];
         }
-      })
+      });
 
       const attributeBIndex = panB.indexOf(name);
 
       Object.entries(pathAttributesB).map(([pathBId, valuesB]: any) => {
         if (attributeBIndex > -1) {
-          if (!combinedPathAttributes.hasOwnProperty(pathBId)) combinedPathAttributes[pathBId] = {}
+          if (!combinedPathAttributes.hasOwnProperty(pathBId))
+            combinedPathAttributes[pathBId] = {};
 
-          combinedPathAttributes[pathBId][index] = valuesB[attributeBIndex]
+          combinedPathAttributes[pathBId][index] = valuesB[attributeBIndex];
         }
-      })
-    })
+      });
+    });
 
     // delete all entries with undefined or null
     Object.values(combinedNodeAttributes).map((values: any) => {
       Object.entries(values).map(([key, value]: any) => {
-        if (!value) delete values[key]
-      })
-    })
+        if (!value) delete values[key];
+      });
+    });
 
     Object.values(combinedPathAttributes).map((values: any) => {
       Object.entries(values).map(([key, value]: any) => {
-        if (!value) delete values[key]
-      })
-    })
-    
-    const combined = { 
-      nodes: {...graph.nodes, ...this.data.nodes},
+        if (!value) delete values[key];
+      });
+    });
+
+    const combined = {
+      nodes: { ...graph.nodes, ...this.data.nodes },
       nan: uniques,
       na: combinedNodeAttributes,
       pa: combinedPathAttributes,
       pan: uniquesPathAttributeNames,
-    }
-      
+    };
+
     // validateData ausführen!!!!
 
-    const isValid = validateData(combined)
+    const isValid = validateData(combined);
 
-    if (isValid.invalid) this.constructErrorMessage("An error occured trying to combine graphs.")
-    
+    if (isValid.invalid)
+      this.constructErrorMessage("An error occured trying to combine graphs.");
+
     this.data = combined;
   }
 }

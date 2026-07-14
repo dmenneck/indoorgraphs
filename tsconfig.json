@@ -1,14 +1,15 @@
 {
-    "compilerOptions": {
-      "module": "commonjs",
-      "noImplicitAny": true,
-      "removeComments": true,
-      "preserveConstEnums": true,
-      "sourceMap": true,
-      "declaration": true,
-      "moduleResolution": "node",
-      "outDir": "./dist",
-      "rootDir": ".",
-    },
-    "include": ["src/components", "src"]
-  }
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "declaration": true,
+    "outDir": "./dist",
+    "rootDir": "."
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "*.ts", "*.js"]
+}
